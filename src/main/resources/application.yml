@@ -1,0 +1,51 @@
+server:
+  port: 8888
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1q2w3e4r
+    url: jdbc:mysql://127.0.0.1:3306/staar-event?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+  # 定时配置
+  quartz:
+    # 相关属性配置
+    properties:
+      org:
+        quartz:
+          # 数据源
+          dataSource:
+            globalJobDataSource:
+              # URL必须大写
+              URL: jdbc:mysql://127.0.0.1:3306/quartz_config?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+              driver: com.mysql.cj.jdbc.Driver
+              maxConnections: 5
+              username: root
+              password: 1q2w3e4r
+              # 必须指定数据源类型
+              provider: hikaricp
+          scheduler:
+            instanceName: globalScheduler
+            # 实例id
+            instanceId: AUTO
+            type: com.alibaba.druid.pool.DruidDataSource
+          jobStore:
+            # 数据源
+            dataSource: globalJobDataSource
+            # JobStoreTX将用于独立环境，提交和回滚都将由这个类处理
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            # 驱动配置
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            # 表前缀
+            tablePrefix: QRTZ_
+            # 失效阈值(只有配置了这个时间，超时策略根据这个时间才有效)
+            misfireThreshold: 100
+            # 集群配置
+            isClustered: true
+          # 线程池配置
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            # 线程数
+            threadCount: 100
+            # 优先级
+            threadPriority: 5
+
